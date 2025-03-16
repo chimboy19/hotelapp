@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'rooms',
+    'news',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +125,23 @@ STATICFILES_DIRS=[os.path.join(BASE_DIR, 'static')]
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+   
+}
+# import os
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# MAIL_HOST = os.getenv('EMAIL_HOST')
+# EMAIL_PORT = os.getenv('EMAIL_PORT')
+# EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+# EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') 
+
+EMAIL_HOST = 'smtp.gmail.com'  # Or another provider
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'nicholasjones611@gmail.com'
+EMAIL_HOST_PASSWORD = 'yhyxsasubjbrsbrv' 

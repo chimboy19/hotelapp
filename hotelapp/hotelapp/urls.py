@@ -23,7 +23,10 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.Home,name='Home'), 
-    path('rooms/',include('rooms.urls'))
+    path('rooms/',include('rooms.urls')),
+    path('accounts/',include('accounts.urls')),
+    path('news/',include('news.urls'))
+    
 ] 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

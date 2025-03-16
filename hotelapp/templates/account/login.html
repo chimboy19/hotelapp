@@ -1,0 +1,62 @@
+{%extends 'base.html'%}
+{%block pagecontent%}
+<style>
+    .btn-primary {
+        background-color: #dfa974; /* Custom background color */
+        color: white; /* Text color */
+        border: none; /* Remove border */
+    }
+
+    .btn-primary:hover {
+        background-color: #c78a57; /* Darker shade for hover effect */
+        color: white;
+    }
+</style>
+<body class="bg-light">
+ {% if request.GET.command  == 'verification' %}
+    <div class="container mx-auto alert alert-info text-center role=alert " style="max-width: 1024px; margin-top:100px;">
+      Thank you for registering with us. we have sent you a verification email to your email address {{request.GET.email}}
+      <br></br>
+      Already verified? <a href="{% url 'login' %}">Login</a>
+    </div>
+
+   {% else %}
+
+    <div class="container">
+        {% include "alerts.html" %}
+        <div class="row justify-content-center align-items-center" style="min-height: 100vh;">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow-lg p-4">
+                    <h2 class="text-center mb-4">Login</h2>
+                    <form action="{% url 'login' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Email</label>
+                            <input type="email" class="form-control"  name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control"  name="password" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <button  type="submit"  class="btn btn-primary w-100">Login</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="#" class="text-muted">Forgot password?</a>
+                    </div>
+                    <div class="text-center mt-2">
+                        <small>Don't have an account? <a href="#">Sign up</a></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{%endif%}
+
+
+{%endblock%}
