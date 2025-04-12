@@ -6,7 +6,7 @@
     <form id="payment-form" class="mt-4 mb-20">
         <div class="mb-3">
             <label class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="fullname" value="{{ booking.user.get_full_name }}" readonly>
+            <input type="text" class="form-control" id="fullname" value="{{ booking.user.full_name }}" readonly>
         </div>
         <div class="mb-3">
             <label class="form-label">Email</label>
@@ -40,10 +40,10 @@
             email: document.getElementById("email").value,
             amount: document.getElementById("amount").value * 100, // Convert to kobo
             currency: "NGN",
-            ref: "HBOOK" + Math.floor((Math.random() * 1000000000) + 1),
+            ref: "{{ reference }}",
             callback: function(response) {
                 alert('Payment successful! Transaction ref: ' + response.reference);
-                window.location.href = '/payment/confirm/{{ booking.id }}/?reference=' + response.reference; // Redirect to confirm payment
+              window.location.href = "{% url 'payment_confirm' booking.id %}?reference=" + response.reference;// Redirect to confirm payment
             },
             onClose: function() {
                 alert('Transaction was not completed.');

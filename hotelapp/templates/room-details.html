@@ -149,24 +149,27 @@
                 <div class="col-lg-4">
                     <div class="room-booking">
                         <h3>Your Reservation</h3>
-                        <form action="">
+                        {% include "alerts.html" %}
+                        <form action="{% url 'book_room' single_room.id  %} " method= "POST">
+
+                             {% csrf_token %}
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
-                                <input type="text" class="date-input" id="date-in">
+                                <input type="text"  class="date-input" id="date-in" name="check_in" required>
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Check Out:</label>
-                                <input type="text" class="date-input" id="date-out">
+                                <input type="text" class="date-input" id="date-out" name="check_out" required>
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="select-option">
                                 <label for="guest">Guests:</label>
-                                <select id="guest">
-                                    <option value="">1 Adults</option>
-                                    <option value="">2 Adults</option>
-                                    <option value="">3 Adults</option>
-                                </select>
+                                <select id="guest"  name="guests">
+                                    <option value="1">1 Adults</option >
+                                    <option value="2">2 Adults</option>
+                                    <option value="3">3 Adults</option>
+                                </select required>
                             </div>
                             <div class="select-option">
                                 <label for="room">Room:</label>

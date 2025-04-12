@@ -1,9 +1,14 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse
+from django .conf import settings
 from django.db.models import Q
 from .models import Rooms,Booking
 from django.contrib import messages
 from datetime import datetime
+import requests
+from dateutil import parser
+import random
+import string
 # Create your views here.
 
 
@@ -38,8 +43,8 @@ def book_room(request, room_id):
         guests = request.POST.get('guests')
 
         # Convert check-in and check-out to date format
-        check_in_date = datetime.strptime(check_in, "%Y-%m-%d").date()
-        check_out_date = datetime.strptime(check_out, "%Y-%m-%d").date()
+        check_in_date = parser.parse(check_in).date()  # Automatically handles different date formats
+        check_out_date = parser.parse(check_out).date()
 
         # Calculate total price
         total_days = (check_out_date - check_in_date).days
@@ -71,18 +76,21 @@ def book_room(request, room_id):
         )
 
         messages.success(request, "Room booked successfully. Proceed to payment.")
-        return redirect(reverse("payment_page") + f"?booking_id={booking.id}")
+        return redirect("payment_page", booking_id=booking.id)
 
     return render(request, "room-details.html", {"room": room})
 
-
+def generate_reference():
+    return 'HBOOK' + ''.join(random.choices(string.digits, k=10))
 
 def payment_page(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
+    reference = generate_reference()
 
     context = {
         "booking": booking,
         "paystack_public_key": settings.PAYSTACK_PUBLIC_KEY,  # Ensure this is set in settings.py
+         "reference": reference,
     }
     return render(request, "payment_page.html", context)
 
@@ -113,7 +121,11 @@ def payment_confirm(request, booking_id):
         messages.error(request, "Payment verification failed. Please contact support.")
         return redirect("payment_page", booking_id=booking.id)
     
+   
+    
 
 
 def booking_success(request):
     return render(request, "booking_success.html")
+
+

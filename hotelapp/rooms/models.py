@@ -35,3 +35,8 @@ class Booking(models.Model):
 
     def __str__(self):
         return f'Booking {self.id} - {self.user.username} - {self.room.room_number}'
+
+
+
+# def get_paystack_payment_url(self):
+#         return f"https://paystack.com/pay/{self.id}"

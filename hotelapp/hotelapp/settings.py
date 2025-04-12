@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'accounts',
     'rooms',
     'news',
+    
 ]
 
 MIDDLEWARE = [
@@ -117,6 +118,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = 'static/'
 STATIC_ROOT =os.path.join(BASE_DIR, 'staticfiles')
@@ -145,3 +147,9 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'nicholasjones611@gmail.com'
 EMAIL_HOST_PASSWORD = 'yhyxsasubjbrsbrv' 
+
+
+# paystack test api
+
+PAYSTACK_PUBLIC_KEY= 'pk_test_3a502de2cb724da563016e771d8cf891c641c5ab'
+PAYSTACK_SECRET_KEY='sk_test_1090d74d57d56a42f7c8c4a5cfc0e7cc36cfedd0'
