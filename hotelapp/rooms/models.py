@@ -13,6 +13,7 @@ class Rooms(models.Model):
     bed=models.CharField(max_length=100)
     price_per_night=models.IntegerField()
     is_available=models.BooleanField(default=True)
+    is_homepage=models.BooleanField(default=True)
 
     def __str__(self):
         return f'{self.room_type} {self.room_number}'
@@ -27,6 +28,7 @@ class Booking(models.Model):
     check_out=models.DateField()
     guests=models.IntegerField()
     total_price=models.IntegerField()
+    reference = models.CharField(max_length=100, blank=True, null=True)
     status= models.CharField(
         max_length=20,
          choices=[('pending', 'Pending'), ('confirmed', 'Confirmed'), ('cancelled', 'Cancelled')],

@@ -7,6 +7,7 @@ from django.contrib import messages
 from datetime import datetime
 import requests
 from dateutil import parser
+from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
 import random
 import string
 # Create your views here.
@@ -14,8 +15,11 @@ import string
 
 def rooms (request):
     rooms=Rooms.objects.all().filter(is_available=True )
+    paginator=Paginator(rooms,3)
+    page=request.GET.get('page')
+    paged_rooms=paginator.get_page(page)
     context={
-      'rooms': rooms 
+      'rooms': paged_rooms
     }
     return render(request,'rooms.html',context)
 
@@ -25,11 +29,14 @@ def rooms (request):
 def room_details(request,id):
     
     single_room=Rooms.objects.get(id=id)
+   
     context={
         'single_room':single_room
+       
     }
 
     return render(request,'room-details.html',context)
+
 
 
 
@@ -63,6 +70,8 @@ def book_room(request, room_id):
         if existing_booking:
             messages.error(request, "This room is already booked for the selected dates.")
             return redirect("room_details", id=room.id)
+        
+        reference=generate_reference()
 
         # Create booking
         booking = Booking.objects.create(
@@ -73,6 +82,7 @@ def book_room(request, room_id):
             guests=int(guests),
             total_price=total_price,
             status="pending",
+            reference=reference
         )
 
         messages.success(request, "Room booked successfully. Proceed to payment.")
@@ -127,5 +137,6 @@ def payment_confirm(request, booking_id):
 
 def booking_success(request):
     return render(request, "booking_success.html")
+
 
 

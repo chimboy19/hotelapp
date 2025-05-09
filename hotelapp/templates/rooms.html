@@ -1,7 +1,7 @@
 {%extends 'base.html'%}
 {%block pagecontent%}
     <!-- Header End -->
-
+ 
     <!-- Breadcrumb Section Begin -->
     <div class="breadcrumb-section">
         <div class="container">
@@ -39,11 +39,11 @@
                                     </tr>
                                     <tr>
                                         <td class="r-o">Capacity:</td>
-                                        <td>{{room.Capacity}}</td>
+                                        <td>{{room.capacity}}</td>
                                     </tr>
                                     <tr>
                                         <td class="r-o">Bed:</td>
-                                        <td>King Beds</td>
+                                        <td>{{room.bed}}</td>
                                     </tr>
                                     <tr>
                                         <td class="r-o">Services:</td>
@@ -66,9 +66,29 @@
                 
                 <div class="col-lg-12">
                     <div class="room-pagination">
-                        <a href="#">1</a>
+                        {% if rooms.has_other_pages %}
+                         {% if rooms.has_previous %}
+                         <a href="?page={{rooms.previous_page_number}}">previous <i class="fa fa-long-arrow-left"></i></a>
+                         {% else %}
+                          <a href="#" style='display:none'>previous <i class="fa fa-long-arrow-leftt" ></i></a>
+                         {% endif %}
+                         {% for i in rooms.paginator.page_range %}
+                            {% if rooms.number == i %}
+                            <a  style='background:#dfa974 ;color:white' href="#"> {{i}}</a>
+                            {% else %}
+                              <a href="?page={{i}}"> {{i}}</a>
+                            {% endif %}
+                         {% endfor %}
+                         {% if rooms.has_next %} 
+                          <a href="?page={{rooms.next_page_number}}"    >next <i class="fa fa-long-arrow-right"></i></a>
+                         {% else %}
+                         
+                          <a  href="#" style='display:none'>next </a>
+                         {% endif %}
+                        {% comment %} <a href="#">1</a>
                         <a href="#">2</a>
-                        <a href="#">Next <i class="fa fa-long-arrow-right"></i></a>
+                        <a href="#">Next <i class="fa fa-long-arrow-right"></i></a> {% endcomment %}
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -77,3 +97,7 @@
     <!-- Rooms Section End -->
 
     {%endblock%}
+    
+
+
+    

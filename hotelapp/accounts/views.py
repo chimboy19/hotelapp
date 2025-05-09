@@ -3,6 +3,7 @@ from .forms import RegistrationForm
 from django.contrib import messages,auth
 from django .contrib.auth.decorators import login_required
 from .models import Account
+from rooms .models import Booking
 # email verification 
 from django .contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -102,3 +103,27 @@ def logout(request):
     auth.logout(request)
     messages.success(request,'you are logged out')
     return redirect('login')
+
+
+
+
+
+def dashboard(request):
+    user=request.user
+    bookings=Booking.objects.filter(user=user)
+    if request.method =='POST':
+        profile_pic=request.FILES.get('profile_picture')
+        if profile_pic:
+            user.profile_picture = profile_pic
+            user.save()
+            return redirect('dashboard')
+        
+    context={
+      'bookings':bookings,
+      'user' :user
+    }
+
+
+
+
+    return render(request,'dashboard.html',context)

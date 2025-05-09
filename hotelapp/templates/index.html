@@ -16,35 +16,39 @@
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
-                    <div class="booking-form">
+                    {% comment %} <div class="booking-form">
                         <h3>Booking Your Hotel</h3>
-                        <form action="#">
+                        {% include 'alerts.html'%}
+                        <form action="{% url 'book_room'   %}" method="POST">
+                            {%csrf_token%}
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
-                                <input type="text" class="date-input" id="date-in">
+                               <input type="text"  class="date-input" id="date-in" name="check_in" required>
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Check Out:</label>
-                                <input type="text" class="date-input" id="date-out">
+                                <input type="text"  class="date-input" id="date-out" name="check_out" required>
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="select-option">
                                 <label for="guest">Guests:</label>
-                                <select id="guest">
-                                    <option value="">2 Adults</option>
-                                    <option value="">3 Adults</option>
-                                </select>
+                                <select id="guest"name="guests">
+                                    <option value="1">1 Adults</option >
+                                    <option value="2">2 Adults</option>
+                                    <option value="3">3 Adults</option>
+                                </select required>
                             </div>
                             <div class="select-option">
                                 <label for="room">Room:</label>
-                                <select id="room">
-                                    <option value="">1 Room</option>
-                                    <option value="">2 Room</option>
+                                <select id="room_id"  required>
+                                    {% for single_room in rooms %}
+                                    <option value=""> room {{single_room.room_number}} {{single_room.room_type}}</option>
+                                    {% endfor%}
                                 </select>
                             </div>
                             <button type="submit">Check Availability</button>
-                        </form>
+                        </form> {% endcomment %}
                     </div>
                 </div>
             </div>
@@ -52,7 +56,7 @@
         <div class="hero-slider owl-carousel">
             <div class="hs-item set-bg" data-setbg="{%static 'img/hero/hero-1.jpg'%}"></div>
             <div class="hs-item set-bg" data-setbg="{%static 'img/hero/hero-2.jpg'%}"></div>
-            <div class="hs-item set-bg" data-setbg="{%static 'img/hero/hero-3.jpg'%}"></div>
+            <div class="hs-item set-bg" data-setbg="{%static 'img/hero/hero-3.webp'%}"></div>
         </div>
     </section>
     <!-- Hero Section End -->
