@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
+from django .contrib.auth.decorators import login_required
 from django.urls import reverse
 from django .conf import settings
 from django.db.models import Q
@@ -41,6 +42,7 @@ def room_details(request,id):
 
 
 
+@login_required(login_url='login')
 def book_room(request, room_id):
     room = get_object_or_404(Rooms, id=room_id)
 
