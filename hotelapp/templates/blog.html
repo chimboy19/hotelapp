@@ -28,7 +28,7 @@
                     <div class="blog-item set-bg" data-setbg="{{blog.blog_image.url}}">
                         <div class="bi-text">
                             <span class="b-tag">Travel Trip</span>
-                            <h4><a href="./blog-details.html">{{blog.title}}</a></h4>
+                            <h4><a href="{% url 'blog_details' blog.id %}">{{blog.title}}</a></h4>
                             <div class="b-time"><i class="icon_clock_alt"></i> {{blog.created_at}}</div>
                         </div>
                     </div>
