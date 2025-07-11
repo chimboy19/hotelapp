@@ -10,6 +10,8 @@ import requests
 from dateutil import parser
 from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
 import random
+from .models import ReviewRating
+from .forms import ReviewForm
 import string
 # Create your views here.
 
@@ -30,9 +32,13 @@ def rooms (request):
 def room_details(request,id):
     
     single_room=Rooms.objects.get(id=id)
+    reviews=ReviewRating.objects .filter(room_id=single_room.id)
+    booked=Booking.objects.filter(room=single_room,status='confirmed')
    
     context={
-        'single_room':single_room
+        'single_room':single_room,
+        'reviews':reviews,
+        'booked' :booked
        
     }
 
@@ -51,11 +57,11 @@ def book_room(request, room_id):
         check_out = request.POST.get('check_out')
         guests = request.POST.get('guests')
 
-        # Convert check-in and check-out to date format
-        check_in_date = parser.parse(check_in).date()  # Automatically handles different date formats
+       
+        check_in_date = parser.parse(check_in).date()  
         check_out_date = parser.parse(check_out).date()
 
-        # Calculate total price
+      
         total_days = (check_out_date - check_in_date).days
         if total_days <= 0:
             messages.error(request, "Check-out date must be after check-in date.")
@@ -63,7 +69,7 @@ def book_room(request, room_id):
 
         total_price = total_days * room.price_per_night
 
-        # Check if room is already booked for the given dates
+       
         existing_booking = Booking.objects.filter(
             Q(room=room) &
             (Q(check_in__lt=check_out_date) & Q(check_out__gt=check_in_date))
@@ -75,7 +81,7 @@ def book_room(request, room_id):
         
         reference=generate_reference()
 
-        # Create booking
+      
         booking = Booking.objects.create(
             user=request.user,
             room=room,
@@ -101,7 +107,7 @@ def payment_page(request, booking_id):
 
     context = {
         "booking": booking,
-        "paystack_public_key": settings.PAYSTACK_PUBLIC_KEY,  # Ensure this is set in settings.py
+        "paystack_public_key": settings.PAYSTACK_PUBLIC_KEY, 
          "reference": reference,
     }
     return render(request, "payment_page.html", context)
@@ -117,18 +123,18 @@ def payment_confirm(request, booking_id):
         messages.error(request, "Invalid payment reference.")
         return redirect("payment_page", booking_id=booking.id)
 
-    # Verify payment with Paystack
+   
     url = f"https://api.paystack.co/transaction/verify/{reference}"
     headers = {"Authorization": f"Bearer {paystack_secret_key}"}
     response = requests.get(url, headers=headers)
     response_data = response.json()
 
     if response_data.get("status") and response_data["data"]["status"] == "success":
-        # Update booking status to confirmed
+        
         booking.status = "confirmed"
         booking.save()
         messages.success(request, "Payment successful! Your booking is confirmed.")
-        return redirect("booking_success")  # Redirect to a success page
+        return redirect("booking_success")  
     else:
         messages.error(request, "Payment verification failed. Please contact support.")
         return redirect("payment_page", booking_id=booking.id)
@@ -140,5 +146,37 @@ def payment_confirm(request, booking_id):
 def booking_success(request):
     return render(request, "booking_success.html")
 
+
+
+
+
+
+def submit_review(request,room_id):
+    url=request.META.get('HTTP_REFERER')
+    if request.method=='POST':
+        try:
+            reviews=ReviewRating.objects.get(user__id=request.user.id,room__id=room_id)
+            form=ReviewForm (request.POST,instance=reviews)
+            form.save()
+            messages.success(request,'Thank you your review has been updated')
+            return redirect(url)
+
+        except ReviewRating .DoesNotExist:
+            form=ReviewForm(request.POST)
+            if form.is_valid():
+                data=ReviewRating()
+                data.subject=form.cleaned_data['subject']
+                data.rating=form.cleaned_data['rating']
+                data.review=form.cleaned_data['review']
+                data.ip=request.META.get('REMOTE_ADDR')
+                data.room_id=room_id
+                data.user_id=request.user.id
+                data.save()
+                messages.success(request,'Thank you your review has been submitted')
+                return redirect(url)
+            
+
+           
+            
 
 

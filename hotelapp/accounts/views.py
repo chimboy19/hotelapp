@@ -133,7 +133,7 @@ def forgotpassword(request):
      return render(request,'account/forgotpassword.html')
 
 
-def resetpassword_vaildate (request,uidb64,token):
+def resetpassword_validate (request,uidb64,token):
     try:
         uid=urlsafe_base64_decode(uidb64).decode()
         user=Account._default_manager.get(pk=uid)

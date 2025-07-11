@@ -11,6 +11,10 @@
         background-color: #c78a57; /* Darker shade for hover effect */
         color: white;
     }
+
+    .fog:hover{
+        color:grey;
+    }
 </style>
 <body class="bg-light">
  {% if request.GET.command  == 'verification' %}
@@ -45,10 +49,10 @@
                         <button  type="submit"  class="btn btn-primary w-100">Login</button>
                     </form>
                     <div class="text-center mt-3">
-                        <a href="{% url "forgotpassword" %}" class="text-muted">Forgot password?</a>
+                        <a href="{% url "forgotpassword" %}" class="fog">Forgot password?</a>
                     </div>
                     <div class="text-center mt-2">
-                        <small>Don't have an account? <a href="#">Sign up</a></small>
+                        <small>Don't have an account? <a href="{% url 'register' %}" class="fog">Sign up</a></small>
                     </div>
                 </div>
             </div>

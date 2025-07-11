@@ -39,6 +39,20 @@ class Booking(models.Model):
         return f'Booking {self.id} - {self.user.username} - {self.room.room_number}'
 
 
+class ReviewRating(models.Model):
+    room= models.ForeignKey(Rooms,on_delete=models.CASCADE)
+    user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    subject=models.CharField(max_length=50 , blank=True)
+    review=models.TextField(max_length=500 ,blank=True)
+    rating=models.FloatField()
+    ip= models.CharField(max_length=50)
+    status=models.BooleanField(default=True)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
 
-# def get_paystack_payment_url(self):
-#         return f"https://paystack.com/pay/{self.id}"
+
+    def __str__(self):
+                return self.subject
+                    
+
+

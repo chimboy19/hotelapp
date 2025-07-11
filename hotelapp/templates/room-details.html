@@ -77,70 +77,86 @@
                             </p>
                         </div>
                     </div>
+                    
                     <div class="rd-reviews">
                         <h4>Reviews</h4>
+                    {% for review in reviews %}
                         <div class="review-item">
                             <div class="ri-pic">
-                                <img src="img/room/avatar/avatar-1.jpg" alt="">
+                                <img src="{{review.user.profile_picture.url}}" alt="">
                             </div>
                             <div class="ri-text">
-                                <span>27 Aug 2019</span>
+                                <span>{{review.created_at}}</span>
                                 <div class="rating">
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star-half_alt"></i>
+                                    <i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1 %}-o {% endif %}" aria-hidden="true"></i>
+                                    <i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2 %}-o {% endif %}" aria-hidden="true"></i>
+                                    <i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3 %}-o {% endif %}" aria-hidden="true"></i>
+                                    <i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4 %}-o {% endif %}" aria-hidden="true"></i>
+                                    <i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5 %}-o {% endif %}" aria-hidden="true"></i>
                                 </div>
-                                <h5>Brandon Kelley</h5>
-                                <p>Neque porro qui squam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                    adipisci velit, sed quia non numquam eius modi tempora. incidunt ut labore et dolore
-                                    magnam.</p>
+                                <h5>{{review.user.full_name}}</h5>
+                                <h6>
+                                    {{review.subject}}
+                                </h6>
+                                <p>{{ review.review}}</p>
                             </div>
                         </div>
-                        <div class="review-item">
-                            <div class="ri-pic">
-                                <img src="img/room/avatar/avatar-2.jpg" alt="">
-                            </div>
-                            <div class="ri-text">
-                                <span>27 Aug 2019</span>
-                                <div class="rating">
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star-half_alt"></i>
-                                </div>
-                                <h5>Brandon Kelley</h5>
-                                <p>Neque porro qui squam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                    adipisci velit, sed quia non numquam eius modi tempora. incidunt ut labore et dolore
-                                    magnam.</p>
-                            </div>
-                        </div>
+                    {% endfor %}
                     </div>
                     <div class="review-add">
+                        {% include "alerts.html" %}
                         <h4>Add Review</h4>
-                        <form action="#" class="ra-form">
+                        <form action="{% url 'submit_review' single_room.id %}" class="ra-form" method="POST">
+                            {%csrf_token%}
                             <div class="row">
+                                
                                 <div class="col-lg-6">
-                                    <input type="text" placeholder="Name*">
+                                
+                                    <input type="text" placeholder="  Review title" name="subject">
                                 </div>
-                                <div class="col-lg-6">
+                                {% comment %} <div class="col-lg-6">
                                     <input type="text" placeholder="Email*">
-                                </div>
+                                </div> {% endcomment %}
                                 <div class="col-lg-12">
                                     <div>
                                         <h5>You Rating:</h5>
-                                        <div class="rating">
-                                            <i class="icon_star"></i>
-                                            <i class="icon_star"></i>
-                                            <i class="icon_star"></i>
-                                            <i class="icon_star"></i>
-                                            <i class="icon_star-half_alt"></i>
-                                        </div>
+                                       
+                                        {% comment %} <div class="rating-star">
+                                            <span>
+                                                
+                                            <i class="fa fa-star{% if  single_room.averageReview < 0.5 %}-o{% elif single_room.averageReview >= 0.5 and single_room.averageReview < 1 %}-o {% endif %}" aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if  single_room.averageReview < 1.5 %}-o{% elif single_room.averageReview >= 1.5 and single_room.averageReview < 2 %}-o {% endif %}" aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if  single_room.averageReview < 2.5 %}-o{% elif single_room.averageReview >= 2.5 and single_room.averageReview < 3 %}-o {% endif %}" aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if  single_room.averageReview < 3.5 %}-o{% elif single_room.averageReview >= 3.5 and single_room.averageReview < 4 %}-o {% endif %}" aria-hidden="true"></i>
+                                            <i class="fa fa-star{% if  single_room.averageReview < 4.5 %}-o{% elif single_room.averageReview >= 4.5 and single_room.averageReview < 5 %}-o {% endif %}" aria-hidden="true"></i>
+                                            <span>{{single_room.countReview}} review</span>
+                        
+                                            </span>
+                                        </div> {% endcomment %}
+                                        <div class="rate">
+                                            <input type="radio" name="rating" id="rating10" value="5" required><label for="rating10" title="5"></label>
+                                            <input type="radio" name="rating" id="rating9" value="4.5" required><label for="rating9" title="4.5" class="half"></label>
+                                            <input type="radio" name="rating" id="rating8" value="4" required><label for="rating8" title="4"></label>
+                                            <input type="radio" name="rating" id="rating7" value="3.5" required><label for="rating7" title="3.5" class="half"></label>
+                                            <input type="radio" name="rating" id="rating6" value="3" required><label for="rating6" title="3" ></label>
+                                            <input type="radio" name="rating" id="rating5" value="2.5" required><label for="rating5" title="2.5" class="half"></label>
+                                            <input type="radio" name="rating" id="rating4" value="2" required><label for="rating4" title="2" ></label>
+                                            <input type="radio" name="rating" id="rating3" value="1.5" required><label for="rating3" title="1.5" class="half"></label>
+                                            <input type="radio" name="rating" id="rating2" value="1" required><label for="rating2" title="1"></label>
+                                            <input type="radio" name="rating" id="rating1" value="0.5" required><label for="rating1" title="0.5" class="half"></label>
+                                            
+                                         </div>
                                     </div>
-                                    <textarea placeholder="Your Review"></textarea>
+                                    <textarea name="review" placeholder="Your Review"></textarea>
+                                    {% if user.is_authenticated%}
+                                     {%if booked %}
                                     <button type="submit">Submit Now</button>
+                                    {%else%}
+                                    <p>you must have booked this product to post a review </p>
+                                    {%endif%}
+                                    {%else%}
+                                    <p>you must be logined in to make a review </p>
+                                    {%endif%}
                                 </div>
                             </div>
                         </form>
@@ -149,7 +165,7 @@
                 <div class="col-lg-4">
                     <div class="room-booking">
                         <h3>Your Reservation</h3>
-                        {% include "alerts.html" %}
+                      
                         <form action="{% url 'book_room' single_room.id  %} " method= "POST">
 
                              {% csrf_token %}
