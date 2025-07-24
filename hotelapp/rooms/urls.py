@@ -10,8 +10,8 @@ urlpatterns = [
     path("payment/<int:booking_id>/",views.payment_page, name="payment_page"),
     path("payment/confirm/<int:booking_id>/" ,views.payment_confirm, name="payment_confirm"),
     path("booking-success/",views. booking_success, name="booking_success"),
-    path('submit_review/<int:room_id>/',views.submit_review,name="submit_review")
-
+    path('submit_review/<int:room_id>/',views.submit_review,name="submit_review"),
+    path('search/',views.search,name="search")
 
     
 ] 

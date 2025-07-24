@@ -7,6 +7,7 @@
             <div class="row">
                 <div class="col-lg-4">
                     <div class="contact-text">
+                         {% include "alerts.html" %}
                         <h2>Contact Info</h2>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                             labore et dolore magna aliqua.</p>
@@ -22,7 +23,7 @@
                                 </tr>
                                 <tr>
                                     <td class="c-o">Email:</td>
-                                    <td>info.colorlib@gmail.com</td>
+                                    <td>nickooraezu@gmail.com</td>
                                 </tr>
                                 <tr>
                                     <td class="c-o">Fax:</td>
@@ -33,16 +34,17 @@
                     </div>
                 </div>
                 <div class="col-lg-7 offset-lg-1">
-                    <form action="#" class="contact-form">
+                    <form action="{% url 'contact' %}" class="contact-form" method="POST">
+                        {%csrf_token%}
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Your Name">
+                                <input type="text" placeholder="Your Name" name="name"required>
                             </div>
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Your Email">
+                                <input type="text" placeholder="Your Email" name="email" required>
                             </div>
                             <div class="col-lg-12">
-                                <textarea placeholder="Your Message"></textarea>
+                                <textarea placeholder="Your Message" name="message" required></textarea>
                                 <button type="submit">Submit Now</button>
                             </div>
                         </div>

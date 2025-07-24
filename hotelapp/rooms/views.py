@@ -180,3 +180,18 @@ def submit_review(request,room_id):
             
 
 
+def search(request):
+    
+    if 'keyword' in request.GET:
+        keyword = request.GET ['keyword']
+        if keyword:
+            rooms=Rooms.objects.order_by('is_available').filter(Q(room_type__icontains=keyword ) | Q(room_number__icontains=keyword))
+            room_count=rooms.count()
+       
+            
+    context={
+        'rooms':rooms,
+        'room_count': room_count
+    }
+    
+    return render(request,'rooms.html',context)
